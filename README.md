@@ -8,3 +8,8 @@
 ```bash
 ./bootstrap.sh
 ```
+
+## 执行（执行前自动构建）
+```bash
+./run.sh
+```

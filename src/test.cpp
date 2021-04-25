@@ -10,7 +10,9 @@ string readJson() {
    string chunk;
    int i = 0;
    ifstream file;
-   file.open("../test.json");
+   string filename = __FILE__;
+   filename.replace(filename.length() - 8, 8, "test.json");
+   file.open(filename);
 
    while (getline(file, chunk)) {
        if (i++ > 0) {
