@@ -32,7 +32,7 @@ string Node::toString() {
         str += "]";
         return str;
     } else if (type == NodeType::StringLiteral) {
-        return '"' + sValue + '"';
+        return '"' + stringEscape(sValue, '"') + '"';
     } else if (type == NodeType::NumericLiteral) {
         return to_string(dValue);
     } else if (type == NodeType::BooleanLiteral) {
@@ -43,7 +43,6 @@ string Node::toString() {
         cout << "未知类型" << endl;
         exit(10); // TODO
     }
-    return "Node:" + type;
 }
 
 Node::Node() {

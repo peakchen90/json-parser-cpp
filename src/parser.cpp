@@ -66,10 +66,13 @@ Node Parser::parseNode() {
 }
 
 Node Parser::parseObjectExpression() {
+    bool hasTailComma = false;
     expect(BRACES_START);
     next();
     vector<Node> properties;
-    while (currentToken.type != BRACES_END) {
+
+    while (isValidPos() && currentToken.type != BRACES_END) {
+        hasTailComma = false;
         vector<Node> section;
         // key
         expect(STRING);
@@ -84,13 +87,18 @@ Node Parser::parseObjectExpression() {
         section.push_back(parseNode());
         Node property(NodeType::ObjectProperty, section);
         properties.push_back(property);
-        // next();
 
         // end of comma
         if (currentToken.type == COMMA) {
+            hasTailComma = true;
             next();
         }
     }
+
+    if (hasTailComma) {
+        unexpected(Token()); // TODO
+    }
+
     Node node(NodeType::ObjectExpression, properties);
     expect(BRACES_END);
     next();
@@ -98,16 +106,24 @@ Node Parser::parseObjectExpression() {
 }
 
 Node Parser::parseArrayExpression() {
+    bool hasTailComma = false;
     expect(BRACKETS_START);
     next();
     vector<Node> elements;
-    while (currentToken.type != BRACKETS_END) {
+
+    while (isValidPos() && currentToken.type != BRACKETS_END) {
+        hasTailComma = false;
         elements.push_back(parseNode());
-        // next();
         if (currentToken.type == COMMA) {
+            hasTailComma = true;
             next();
         }
     }
+
+    if (hasTailComma) {
+        unexpected(Token()); // TODO
+    }
+
     Node node(NodeType::ArrayExpression, elements);
     expect(BRACKETS_END);
     next();

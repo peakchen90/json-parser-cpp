@@ -28,3 +28,15 @@ bool stringEquals(string a, string b) {
     }
     return true;
 }
+
+string stringEscape(string str, char ch) {
+    int length = str.size();
+    int i = length - 1;
+    while (i >= 0) {
+        if (str[i] == ch) {
+            str.replace(i, 0, "\\");
+        }
+        i--;
+    }
+    return str;
+}

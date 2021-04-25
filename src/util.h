@@ -26,5 +26,7 @@ bool isWordChar(int code);
 
 bool stringEquals(string a, string b);
 
+string stringEscape(string str, char ch);
+
 
 #endif //JSON_PARSER_CPP_UTIL_H
