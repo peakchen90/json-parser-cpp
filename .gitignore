@@ -6,11 +6,12 @@
 
 # Editor directories and files
 .idea
-.vscode
+.vscode/**/*
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-cmake-build-debug/
+/build
+!.vscode/launch.json
