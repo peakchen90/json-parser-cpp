@@ -5,35 +5,38 @@
 #include "node.h"
 
 string Node::toString() {
-    cout << "----------- DEBUG 2-----------" << endl;
     if (type == NodeType::Root) {
-        return ((Root *) body)->toString();
+        return children[0].toString();
     } else if (type == NodeType::ObjectExpression) {
         string str = "{";
-        Node *property = (Node *) properties;
-        while (property) {
-            str += property->toString() + ",";
-            property++;
+        int size = children.size();
+        int i = 0;
+        while (i < size) {
+            str += children[i].toString() + (i < size - 1 ? "," : "");
+            i++;
         }
         str += "}";
         return str;
     } else if (type == NodeType::ObjectProperty) {
-        return "\"" + *((string *) key) + "\": " + ((Node *) value)->toString();
+        string keyStr = children[0].toString();
+        string valueStr = children[1].toString();
+        return keyStr + ':' + valueStr;
     } else if (type == NodeType::ArrayExpression) {
         string str = "[";
-        Node *item = (Node *) elements;
-        while (item) {
-            str += item->toString() + ",";
-            item++;
+        int size = children.size();
+        int i = 0;
+        while (i < size) {
+            str += children[i].toString() + (i < size - 1 ? "," : "");
+            i++;
         }
         str += "]";
         return str;
     } else if (type == NodeType::StringLiteral) {
-        return *((string *) value);
+        return '"' + sValue + '"';
     } else if (type == NodeType::NumericLiteral) {
-        return to_string(*(double *) value);
+        return to_string(dValue);
     } else if (type == NodeType::BooleanLiteral) {
-        return *((bool *) value) ? "true" : "false";
+        return bValue ? "true" : "false";
     } else if (type == NodeType::NullLiteral) {
         return "null";
     } else {
@@ -43,81 +46,20 @@ string Node::toString() {
     return "Node:" + type;
 }
 
-ObjectProperty::ObjectProperty(string key, Node value) : key(key), value(value) {
-    type = NodeType::ObjectExpression;
+Node::Node() {
 }
 
-//string ObjectProperty::toString() {
-//    return "\"" + key + "\": " + value.toString();
-//}
-
-ObjectExpression::ObjectExpression(ObjectProperty *properties) : properties(properties) {
-    type = NodeType::ObjectExpression;
+Node::Node(string type) : type(type) {
 }
 
-//string ObjectExpression::toString() {
-//    string str = "{";
-//    Node *property = properties;
-//    while (property) {
-//        str += property->toString() + ",";
-//        property++;
-//    }
-//    str += "}";
-//    return str;
-//}
-
-ArrayExpression::ArrayExpression(Node *elements) : elements(elements) {
-    type = NodeType::ArrayExpression;
+Node::Node(string type, string value) : type(type), sValue(value) {
 }
 
-//string ArrayExpression::toString() {
-//    string str = "[";
-//    Node *item = elements;
-//    while (item) {
-//        str += item->toString() + ",";
-//        item++;
-//    }
-//    str += "]";
-//    return str;
-//}
-
-StringLiteral::StringLiteral(string value) : value(value) {
-    type = NodeType::StringLiteral;
+Node::Node(string type, double value) : type(type), dValue(value) {
 }
 
-//string StringLiteral::toString() {
-//    return value;
-//}
-
-NumericLiteral::NumericLiteral(double value) : value(value) {
-    type = NodeType::NumericLiteral;
+Node::Node(string type, bool value) : type(type), bValue(value) {
 }
 
-//string NumericLiteral::toString() {
-//    return to_string(value);
-//}
-
-BooleanLiteral::BooleanLiteral(bool value) : value(value) {
-    type = NodeType::BooleanLiteral;
+Node::Node(string type, vector<Node> children) : type(type), children(children) {
 }
-
-//string BooleanLiteral::toString() {
-//    return value ? "true" : "false";
-//}
-
-NullLiteral::NullLiteral() {
-    type = NodeType::NullLiteral;
-}
-
-//string NullLiteral::toString() {
-//    return "null";
-//}
-
-Root::Root(Node body) : body(body) {
-    type = NodeType::Root;
-}
-
-//string Root::toString() {
-//    cout << "axxx";
-//    return body.toString();
-//}

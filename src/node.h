@@ -10,14 +10,14 @@
 #include "util.h"
 
 namespace NodeType {
-    const string ObjectProperty = "ObjectProperty";
+    const string Root = "Root";
     const string ObjectExpression = "ObjectExpression";
+    const string ObjectProperty = "ObjectProperty";
     const string ArrayExpression = "ArrayExpression";
     const string StringLiteral = "StringLiteral";
     const string NumericLiteral = "NumericLiteral";
     const string BooleanLiteral = "BooleanLiteral";
     const string NullLiteral = "NullLiteral";
-    const string Root = "Root";
 }
 
 class Node {
@@ -25,84 +25,30 @@ public:
     string type;
     int start;
     int end;
-    void *key;
-    void *value;
-    void *properties;
-    void *elements;
-    void *body;
+
+    bool bValue;
+    string sValue;
+    double dValue;
+
+    // 子节点信息
+    // properties、elements 作为数组使用
+    // key、value 分别取第 0 1 个元素
+    // 其他类型取第 0 个元素
+    vector<Node> children;
+
+    Node();
+
+    Node(string type);
+
+    Node(string type, string value);
+
+    Node(string type, double value);
+
+    Node(string type, bool value);
+
+    Node(string type, vector<Node> children);
 
     string toString();
-};
-
-class ObjectProperty : public Node {
-public:
-    string key;
-    Node value;
-
-    ObjectProperty(string key, Node value);
-
-    // string toString() override;
-};
-
-class ObjectExpression : public Node {
-public:
-    ObjectProperty *properties;
-
-    ObjectExpression(ObjectProperty *properties);
-
-    // string toString() override;
-};
-
-class ArrayExpression : public Node {
-public:
-    Node *elements;
-
-    ArrayExpression(Node *elements);
-
-    // string toString() override;
-};
-
-class StringLiteral : public Node {
-public:
-    string value;
-
-    StringLiteral(string value);
-
-    // string toString() override;
-};
-
-class NumericLiteral : public Node {
-public:
-    double value;
-
-    NumericLiteral(double value);
-
-    // string toString() override;
-};
-
-class BooleanLiteral : public Node {
-public:
-    bool value;
-
-    BooleanLiteral(bool value);
-
-    // string toString() override;
-};
-
-class NullLiteral : public Node {
-public:
-    NullLiteral();
-
-    // string toString() override;
-};
-
-class Root : public Node {
-public:
-    Node body;
-
-    Root(Node body);
-
-    // string toString() override;
 };
 
 

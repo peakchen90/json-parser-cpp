@@ -18,7 +18,9 @@ Parser::~Parser() = default;
 
 Node Parser::parse() {
     next();
-    ast = Root(parseNode());
+    Node body = parseNode();
+    Node node(NodeType::Root, vector<Node>{body});
+    ast = node;
     if (currentToken.type != END_F) {
         unexpected(currentToken); // TODO
     }
@@ -33,17 +35,27 @@ Node Parser::parseNode() {
     } else if (type == BRACKETS_START) {
         node = parseArrayExpression();
     } else if (type == STRING) {
-        node = StringLiteral(currentToken.value);
+        Node value(NodeType::StringLiteral, currentToken.value);
+        node = value;
+        next();
     } else if (type == NUMBER) {
-        node = NumericLiteral(stod(currentToken.value));
+        Node value(NodeType::NumericLiteral, stod(currentToken.value));
+        node = value;
+        next();
     } else if (type == WORD) {
-        string value = currentToken.value;
-        if (stringEquals(value, "null")) {
-            node = NullLiteral();
-        } else if (stringEquals(value, "true")) {
-            node = BooleanLiteral(true);
-        } else if (stringEquals(value, "false")) {
-            node = BooleanLiteral(false);
+        string tokenValue = currentToken.value;
+        if (stringEquals(tokenValue, "null")) {
+            Node value(NodeType::NullLiteral);
+            node = value;
+            next();
+        } else if (stringEquals(tokenValue, "true")) {
+            Node value(NodeType::BooleanLiteral, true);
+            node = value;
+            next();
+        } else if (stringEquals(tokenValue, "false")) {
+            Node value(NodeType::BooleanLiteral, false);
+            node = value;
+            next();
         } else {
             unexpected(currentToken); // TODO
         }
@@ -53,42 +65,52 @@ Node Parser::parseNode() {
     return node;
 }
 
-ObjectExpression Parser::parseObjectExpression() {
+Node Parser::parseObjectExpression() {
     expect(BRACES_START);
-    ObjectProperty *properties = new ObjectProperty("", Node());
-    ObjectProperty *property = properties;
+    next();
+    vector<Node> properties;
     while (currentToken.type != BRACES_END) {
+        vector<Node> section;
+        // key
         expect(STRING);
-        string key = currentToken.value;
-        expect(SEPARATOR);
-        *property = ObjectProperty(key, parseNode());
+        Node key(NodeType::StringLiteral, currentToken.value);
+        section.push_back(key);
+
         next();
+        expect(SEPARATOR); // :
+        next();
+
+        // value
+        section.push_back(parseNode());
+        Node property(NodeType::ObjectProperty, section);
+        properties.push_back(property);
+        // next();
+
+        // end of comma
         if (currentToken.type == COMMA) {
             next();
         }
-        property++;
     }
-    ObjectExpression node(properties);
+    Node node(NodeType::ObjectExpression, properties);
     expect(BRACES_END);
-    delete properties;
+    next();
     return node;
 }
 
-ArrayExpression Parser::parseArrayExpression() {
+Node Parser::parseArrayExpression() {
     expect(BRACKETS_START);
-    Node *elements = new Node;
-    Node *item = elements;
+    next();
+    vector<Node> elements;
     while (currentToken.type != BRACKETS_END) {
-        *item = parseNode();
-        next();
+        elements.push_back(parseNode());
+        // next();
         if (currentToken.type == COMMA) {
             next();
         }
-        item++;
     }
-    ArrayExpression node(elements);
+    Node node(NodeType::ArrayExpression, elements);
     expect(BRACKETS_END);
-    delete elements;
+    next();
     return node;
 }
 
@@ -278,9 +300,7 @@ bool Parser::isValidPos() const {
 }
 
 void Parser::expect(TokenType type) {
-    if (currentToken.type == type) {
-        next();
-    } else {
+    if (currentToken.type != type) {
         unexpected(currentToken);
     }
 }

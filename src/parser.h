@@ -21,9 +21,9 @@ protected:
 
     Node parseNode();
 
-    ObjectExpression parseObjectExpression();
+    Node parseObjectExpression();
 
-    ArrayExpression parseArrayExpression();
+    Node parseArrayExpression();
 
     void next();
 
