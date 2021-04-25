@@ -10,6 +10,6 @@ add_executable(
     src/node.cpp
     src/token.cpp
     src/util.cpp
-#    src/stringify.cpp
+    src/stringify.cpp
 )
 

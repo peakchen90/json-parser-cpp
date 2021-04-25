@@ -9,7 +9,23 @@
 #include "env.h"
 #include "node.h"
 
-string nodeStringify(Node &obj);
+class Stringifier {
+private:
+    int currentIndent;
+
+    int pushIndent();
+
+    int popIndent();
+
+    string getIndentStr();
+
+public:
+    int indent;
+
+    Stringifier(int indent = 0);
+
+    string stringify(Node &node);
+};
 
 
 #endif //JSON_PARSER_CPP_STRINGIFY_H

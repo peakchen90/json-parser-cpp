@@ -40,3 +40,14 @@ string stringEscape(string str, char ch) {
     }
     return str;
 }
+
+string strIndent(int width, char prefix) {
+    string res;
+    if (prefix) res += prefix;
+    int i = 0;
+    while (i < width) {
+        res += ' ';
+        i++;
+    }
+    return res;
+}

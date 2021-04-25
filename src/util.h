@@ -28,5 +28,6 @@ bool stringEquals(string a, string b);
 
 string stringEscape(string str, char ch);
 
+string strIndent(int width, char prefix = 0);
 
 #endif //JSON_PARSER_CPP_UTIL_H

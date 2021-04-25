@@ -5,42 +5,67 @@
 #include "stringify.h"
 #include "node.h"
 
-string nodeStringify(Node &obj) {
-    string type = obj.type;
-    cout << "----------- DEBUG 1-----------" << type << endl;
+Stringifier::Stringifier(int indent) : indent(indent) {
+    currentIndent = 0;
+}
 
-    if (type == NodeType::Root) {
-        cout << "----------- DEBUG 4-----------" << type << endl;
-        cout << "----------- DEBUG 3-----------" << ((Node *) obj.body) << endl;
-        return nodeStringify(*((Node *) obj.body));
-    } else if (type == NodeType::ObjectExpression) {
+int Stringifier::pushIndent() {
+    currentIndent += indent;
+    return currentIndent;
+}
+
+int Stringifier::popIndent() {
+    currentIndent -= indent;
+    return currentIndent;
+}
+
+string Stringifier::getIndentStr() {
+    if (indent == 0) return "";
+    return strIndent(currentIndent, '\n');
+}
+
+string Stringifier::stringify(Node &node) {
+    if (node.type == NodeType::Root) {
+        return stringify(node.children[0]);
+    } else if (node.type == NodeType::ObjectExpression) {
         string str = "{";
-        Node *property = (Node *) obj.properties;
-        while (property) {
-            cout << "----------- DEBUG 2-----------" << type << endl;
-            str += nodeStringify(*((Node *) property)) + ",";
-            property++;
+        pushIndent();
+        int size = node.children.size();
+        int i = 0;
+        while (i < size) {
+            str += getIndentStr();
+            str += stringify(node.children[i]) + (i < size - 1 ? "," : "");
+            i++;
         }
+        popIndent();
+        str += getIndentStr();
         str += "}";
         return str;
-    } else if (type == NodeType::ObjectProperty) {
-        return "\"" + *((string *) obj.key) + "\": " + nodeStringify(*((Node *) obj.value));
-    } else if (type == NodeType::ArrayExpression) {
+    } else if (node.type == NodeType::ObjectProperty) {
+        string keyStr = stringify(node.children[0]);
+        string valueStr = stringify(node.children[1]);
+        return keyStr + (indent > 0 ? ": " : ":") + valueStr;
+    } else if (node.type == NodeType::ArrayExpression) {
         string str = "[";
-        Node *item = (Node *) obj.elements;
-        while (item) {
-            str += nodeStringify(*((Node *) item)) + ",";
-            item++;
+        pushIndent();
+        int size = node.children.size();
+        int i = 0;
+        while (i < size) {
+            str += getIndentStr();
+            str += stringify(node.children[i]) + (i < size - 1 ? "," : "");
+            i++;
         }
+        popIndent();
+        str += getIndentStr();
         str += "]";
         return str;
-    } else if (type == NodeType::StringLiteral) {
-        return *((string *) obj.value);
-    } else if (type == NodeType::NumericLiteral) {
-        return to_string(*(double *) obj.value);
-    } else if (type == NodeType::BooleanLiteral) {
-        return *((bool *) obj.value) ? "true" : "false";
-    } else if (type == NodeType::NullLiteral) {
+    } else if (node.type == NodeType::StringLiteral) {
+        return '"' + stringEscape(node.sValue, '"') + '"';
+    } else if (node.type == NodeType::NumericLiteral) {
+        return to_string(node.dValue);
+    } else if (node.type == NodeType::BooleanLiteral) {
+        return node.bValue ? "true" : "false";
+    } else if (node.type == NodeType::NullLiteral) {
         return "null";
     } else {
         cout << "未知类型" << endl;

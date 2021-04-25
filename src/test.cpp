@@ -5,6 +5,7 @@
 #include "env.h"
 #include "node.h"
 #include "parser.h"
+#include "stringify.h"
 
 string readJson() {
     string data;
@@ -28,8 +29,9 @@ string readJson() {
 int main() {
     string input = readJson();
     Parser parser(input);
-    Node ast = parser.parse();
-    cout << ast.toString() << endl;
+    Node node = parser.parse();
+    Stringifier stringifier(2);
+    cout << stringifier.stringify(node) << endl;
 
     return 0;
 }
