@@ -26,9 +26,7 @@ public:
     int start;
     int end;
 
-    bool bValue;
-    string sValue;
-    double dValue;
+    string rawValue;
 
     // 子节点信息
     // properties、elements 作为数组使用
@@ -40,11 +38,7 @@ public:
 
     Node(string type);
 
-    Node(string type, string value);
-
-    Node(string type, double value);
-
-    Node(string type, bool value);
+    Node(string type, string rawValue);
 
     Node(string type, vector<Node> children);
 

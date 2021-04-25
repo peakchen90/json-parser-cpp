@@ -39,8 +39,6 @@ public:
 
     void setRange(int start, int end);
 
-    void setCharRange(int start);
-
     string toString();
 };
 

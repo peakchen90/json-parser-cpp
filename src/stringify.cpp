@@ -60,13 +60,13 @@ string Stringifier::stringify(Node &node) {
         str += "]";
         return str;
     } else if (node.type == NodeType::StringLiteral) {
-        return '"' + stringEscape(node.sValue, '"') + '"';
+        return '"' + stringEscape(node.rawValue, '"') + '"';
     } else if (node.type == NodeType::NumericLiteral) {
-        return to_string(node.dValue);
+        return node.rawValue;
     } else if (node.type == NodeType::BooleanLiteral) {
-        return node.bValue ? "true" : "false";
+        return node.rawValue;
     } else if (node.type == NodeType::NullLiteral) {
-        return "null";
+        return node.rawValue;
     } else {
         cout << "未知类型" << endl;
         exit(10); // TODO

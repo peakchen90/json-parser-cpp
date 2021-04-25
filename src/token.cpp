@@ -17,10 +17,6 @@ void Token::setRange(int start, int end) {
     this->end = end;
 }
 
-void Token::setCharRange(int start) {
-    setRange(start, start + 1);
-}
-
 string Token::toString() {
     return "Token:" + value + "(" + to_string(start) + "," + to_string(end) + ")";
 }

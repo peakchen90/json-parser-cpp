@@ -39,21 +39,17 @@ Node Parser::parseNode() {
         node = value;
         next();
     } else if (type == NUMBER) {
-        Node value(NodeType::NumericLiteral, stod(currentToken.value));
+        Node value(NodeType::NumericLiteral, currentToken.value);
         node = value;
         next();
     } else if (type == WORD) {
         string tokenValue = currentToken.value;
         if (stringEquals(tokenValue, "null")) {
-            Node value(NodeType::NullLiteral);
+            Node value(NodeType::NullLiteral, tokenValue);
             node = value;
             next();
-        } else if (stringEquals(tokenValue, "true")) {
-            Node value(NodeType::BooleanLiteral, true);
-            node = value;
-            next();
-        } else if (stringEquals(tokenValue, "false")) {
-            Node value(NodeType::BooleanLiteral, false);
+        } else if (stringEquals(tokenValue, "true") || stringEquals(tokenValue, "false")) {
+            Node value(NodeType::BooleanLiteral, tokenValue);
             node = value;
             next();
         } else {

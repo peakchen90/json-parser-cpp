@@ -10,13 +10,7 @@ Node::Node() {
 Node::Node(string type) : type(type) {
 }
 
-Node::Node(string type, string value) : type(type), sValue(value) {
-}
-
-Node::Node(string type, double value) : type(type), dValue(value) {
-}
-
-Node::Node(string type, bool value) : type(type), bValue(value) {
+Node::Node(string type, string rawValue) : type(type), rawValue(rawValue) {
 }
 
 Node::Node(string type, vector<Node> children) : type(type), children(children) {
