@@ -4,14 +4,9 @@
 ## 环境
 - [cmake](https://cmake.org/)
 
-## 启动并构建
+## 安装并执行测试
 ```bash
-./bootstrap.sh
-```
-
-## 执行（执行前自动构建）
-```bash
-./run.sh
+./run-test.sh
 ```
 
 ## TODO

@@ -8,4 +8,4 @@ echo "============================== 开始执行 ==============================
 echo ""
 
 # 执行
-./build/json_parser_cpp
+./build/json_parser_test

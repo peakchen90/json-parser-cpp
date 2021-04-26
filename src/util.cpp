@@ -51,3 +51,20 @@ string strIndent(int width, char prefix) {
     }
     return res;
 }
+
+string readFile(const string& path) {
+    string data;
+    string chunk;
+    int i = 0;
+    ifstream file;
+    file.open(path);
+
+    while (getline(file, chunk)) {
+        if (i++ > 0) {
+            data += "\n";
+        }
+        data += chunk;
+    }
+    file.close();
+    return data;
+}

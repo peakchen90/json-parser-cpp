@@ -30,4 +30,7 @@ string stringEscape(string str, char ch);
 
 string strIndent(int width, char prefix = 0);
 
+string readFile(const string& path);
+
+
 #endif //JSON_PARSER_CPP_UTIL_H

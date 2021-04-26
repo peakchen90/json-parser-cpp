@@ -35,22 +35,18 @@ Node Parser::parseNode() {
     } else if (type == BRACKETS_START) {
         node = parseArrayExpression();
     } else if (type == STRING) {
-        Node value(NodeType::StringLiteral, currentToken.value);
-        node = value;
+        node = Node(NodeType::StringLiteral, currentToken.value);
         next();
     } else if (type == NUMBER) {
-        Node value(NodeType::NumericLiteral, currentToken.value);
-        node = value;
+        node = Node(NodeType::NumericLiteral, currentToken.value);
         next();
     } else if (type == WORD) {
         string tokenValue = currentToken.value;
         if (stringEquals(tokenValue, "null")) {
-            Node value(NodeType::NullLiteral, tokenValue);
-            node = value;
+            node = Node(NodeType::NullLiteral, tokenValue);
             next();
         } else if (stringEquals(tokenValue, "true") || stringEquals(tokenValue, "false")) {
-            Node value(NodeType::BooleanLiteral, tokenValue);
-            node = value;
+            node = Node(NodeType::BooleanLiteral, tokenValue);
             next();
         } else {
             unexpected(currentToken); // TODO
