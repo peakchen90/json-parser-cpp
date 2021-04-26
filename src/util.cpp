@@ -2,6 +2,7 @@
 // Created by chen on 2021/4/24.
 //
 
+#include "env.h"
 #include "util.h"
 
 //Location getLocation(int startLine, int startColumn, int endLine, int endColumn) {
@@ -58,8 +59,12 @@ namespace JSON {
         string data;
         string chunk;
         int i = 0;
-        ifstream file;
-        file.open(path);
+        ifstream file(path);
+
+        if (!file) {
+            cerr << "Error: File not found: " << path << endl;
+            exit(1);
+        }
 
         while (getline(file, chunk)) {
             if (i++ > 0) {
@@ -68,7 +73,26 @@ namespace JSON {
             data += chunk;
         }
         file.close();
+
         return data;
     }
-    
+
+    void writeFile(string &path, string &data) {
+        ofstream file;
+        file.open(path);
+        file << data;
+        file.close();
+    }
+
+    string getCWD() {
+        char buffer[1024];
+        getcwd(buffer, 1024);
+        string res = buffer;
+        return res;
+    }
+
+    string resolvePath(string &path) {
+        string cwd = getCWD();
+        return cwd + '/' + path;
+    }
 }

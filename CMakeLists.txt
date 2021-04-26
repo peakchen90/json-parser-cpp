@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(
     json_parser_test
     src/test.cpp
-    src/index.cpp
     src/parser.cpp
     src/node.cpp
     src/token.cpp
@@ -20,7 +19,6 @@ add_executable(
 add_executable(
     json_parser
     src/cli.cpp
-    src/index.cpp
     src/parser.cpp
     src/node.cpp
     src/token.cpp

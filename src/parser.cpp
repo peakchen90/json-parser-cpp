@@ -66,18 +66,17 @@ namespace JSON {
 
         while (isValidPos() && currentToken.type != BRACES_END) {
             hasTailComma = false;
-            vector<Node> section;
             // key
             expect(STRING);
             Node key(NodeType::StringLiteral, currentToken.value);
-            section.push_back(key);
 
+            // :
             next();
-            expect(SEPARATOR); // :
-            next();
+            expect(SEPARATOR);
 
             // value
-            section.push_back(parseNode());
+            next();
+            vector<Node> section{key, parseNode()};
             Node property(NodeType::ObjectProperty, section);
             properties.push_back(property);
 

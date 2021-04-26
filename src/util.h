@@ -34,7 +34,11 @@ namespace JSON {
 
     string readFile(const string &path);
 
+    void writeFile(string &path, string &data);
 
+    string getCWD();
+
+    string resolvePath(string &path);
 }
 
 #endif //JSON_PARSER_CPP_UTIL_H
