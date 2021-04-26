@@ -18,7 +18,7 @@ namespace JSON {
     Node Parser::parse() {
         next();
         Node body = parseNode();
-        Node node(NodeType::Root, vector<Node>{body}, body.start, body.end);
+        Node node(NodeType::Root, vector<Node>{body}, 0, length);
         ast = node;
         if (currentToken.type != END_F) {
             unexpected(currentToken); // TODO
@@ -140,7 +140,6 @@ namespace JSON {
             token = readToken();
         }
         currentToken = token;
-        cout << currentToken.toString() << endl;
     }
 
     Token Parser::readToken() {

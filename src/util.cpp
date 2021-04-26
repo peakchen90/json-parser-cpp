@@ -93,13 +93,13 @@ namespace JSON {
     }
 
     Position getPosition(string &source, int pos) {
-        Position position{1, 0};
+        Position position{1, 1};
         int len = source.length();
         int i = 0;
         while (i < len && i < pos) {
             if (source[i] == '\n') {
                 position.line++;
-                position.column = 0;
+                position.column = 1;
             } else {
                 position.column++;
             }
