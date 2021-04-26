@@ -5,10 +5,6 @@
 #include "env.h"
 #include "util.h"
 
-//Location getLocation(int startLine, int startColumn, int endLine, int endColumn) {
-//    return Location{Position{startLine, startColumn}, Position{endLine, endColumn}};
-//}
-
 namespace JSON {
 
     bool isNumberChar(int code) {
@@ -94,5 +90,21 @@ namespace JSON {
     string resolvePath(string &path) {
         string cwd = getCWD();
         return cwd + '/' + path;
+    }
+
+    Position getPosition(string &source, int pos) {
+        Position position{1, 0};
+        int len = source.length();
+        int i = 0;
+        while (i < len && i < pos) {
+            if (source[i] == '\n') {
+                position.line++;
+                position.column = 0;
+            } else {
+                position.column++;
+            }
+            i++;
+        }
+        return position;
     }
 }

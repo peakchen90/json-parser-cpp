@@ -10,7 +10,7 @@
 #include "util.h"
 
 namespace JSON {
-    
+
     namespace NodeType {
         const string Root = "Root";
         const string ObjectExpression = "ObjectExpression";
@@ -42,7 +42,11 @@ namespace JSON {
 
         Node(string type, string rawValue);
 
+        Node(string type, string rawValue, int start, int end);
+
         Node(string type, vector<Node> children);
+
+        Node(string type, vector<Node> children, int start, int end);
 
         string toString();
     };

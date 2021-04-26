@@ -12,7 +12,7 @@
 namespace JSON {
     class Stringifier {
     private:
-        int configIndent;
+        int configIndent = 0;
         int current = 0;
 
         int pushIndent();

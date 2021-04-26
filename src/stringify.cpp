@@ -5,10 +5,6 @@
 #include "stringify.h"
 #include "node.h"
 
-//Stringifier::Stringifier(int configIndent) : configIndent(configIndent) {
-//    current = 0;
-//}
-
 namespace JSON {
 
     int Stringifier::pushIndent() {

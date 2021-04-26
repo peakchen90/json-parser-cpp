@@ -18,7 +18,5 @@ int main() {
     JSON::Node node = parser.parse();
     JSON::Stringifier stringifier;
     cout << stringifier.stringify(node) << endl;
-    cout << stringifier.stringify(node.children[0].children[2], 4) << endl;
-
     return 0;
 }

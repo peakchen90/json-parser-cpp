@@ -18,8 +18,6 @@ namespace JSON {
         int pos;
         Token currentToken;
         Token lastToken;
-        int start;
-        int end;
 
         Node parseNode();
 
@@ -36,10 +34,6 @@ namespace JSON {
         Token readNumberToken();
 
         Token readWordToken();
-
-        Node startNode(int pos);
-
-        Node finishNode(Node &node);
 
         int getCodeAt(int index);
 

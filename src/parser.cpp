@@ -11,8 +11,6 @@ namespace JSON {
         lastToken = currentToken;
         length = input.length();
         pos = 0;
-        start = 0;
-        end = 0;
     }
 
     Parser::~Parser() = default;
@@ -20,7 +18,7 @@ namespace JSON {
     Node Parser::parse() {
         next();
         Node body = parseNode();
-        Node node(NodeType::Root, vector<Node>{body});
+        Node node(NodeType::Root, vector<Node>{body}, body.start, body.end);
         ast = node;
         if (currentToken.type != END_F) {
             unexpected(currentToken); // TODO
@@ -30,24 +28,26 @@ namespace JSON {
 
     Node Parser::parseNode() {
         Node node;
+        int startPos = currentToken.start;
         TokenType type = currentToken.type;
+
         if (type == BRACES_START) {
             node = parseObjectExpression();
         } else if (type == BRACKETS_START) {
             node = parseArrayExpression();
         } else if (type == STRING) {
-            node = Node(NodeType::StringLiteral, currentToken.value);
+            node = Node(NodeType::StringLiteral, currentToken.value, currentToken.start, currentToken.end);
             next();
         } else if (type == NUMBER) {
-            node = Node(NodeType::NumericLiteral, currentToken.value);
+            node = Node(NodeType::NumericLiteral, currentToken.value, currentToken.start, currentToken.end);
             next();
         } else if (type == WORD) {
             string tokenValue = currentToken.value;
             if (stringEquals(tokenValue, "null")) {
-                node = Node(NodeType::NullLiteral, tokenValue);
+                node = Node(NodeType::NullLiteral, tokenValue, currentToken.start, currentToken.end);
                 next();
             } else if (stringEquals(tokenValue, "true") || stringEquals(tokenValue, "false")) {
-                node = Node(NodeType::BooleanLiteral, tokenValue);
+                node = Node(NodeType::BooleanLiteral, tokenValue, currentToken.start, currentToken.end);
                 next();
             } else {
                 unexpected(currentToken); // TODO
@@ -55,11 +55,16 @@ namespace JSON {
         } else {
             unexpected(currentToken); // TODO
         }
+
+        node.start = startPos;
+        node.end = lastToken.end;
+
         return node;
     }
 
     Node Parser::parseObjectExpression() {
         bool hasTailComma = false;
+        int startPos = currentToken.start;
         expect(BRACES_START);
         next();
         vector<Node> properties;
@@ -68,7 +73,7 @@ namespace JSON {
             hasTailComma = false;
             // key
             expect(STRING);
-            Node key(NodeType::StringLiteral, currentToken.value);
+            Node key(NodeType::StringLiteral, currentToken.value, currentToken.start, currentToken.end);
 
             // :
             next();
@@ -77,7 +82,7 @@ namespace JSON {
             // value
             next();
             vector<Node> section{key, parseNode()};
-            Node property(NodeType::ObjectProperty, section);
+            Node property(NodeType::ObjectProperty, section, key.start, lastToken.end);
             properties.push_back(property);
 
             // end of comma
@@ -91,14 +96,16 @@ namespace JSON {
             unexpected(Token()); // TODO
         }
 
-        Node node(NodeType::ObjectExpression, properties);
         expect(BRACES_END);
+        Node node(NodeType::ObjectExpression, properties, startPos, currentToken.end);
         next();
+
         return node;
     }
 
     Node Parser::parseArrayExpression() {
         bool hasTailComma = false;
+        int startPos = currentToken.start;
         expect(BRACKETS_START);
         next();
         vector<Node> elements;
@@ -116,9 +123,10 @@ namespace JSON {
             unexpected(Token()); // TODO
         }
 
-        Node node(NodeType::ArrayExpression, elements);
         expect(BRACKETS_END);
+        Node node(NodeType::ArrayExpression, elements, startPos, currentToken.end);
         next();
+
         return node;
     }
 
@@ -129,10 +137,10 @@ namespace JSON {
         if (!isValidPos()) {
             token = Token(END_F, "EOF", length, length);
         } else {
-            start = pos;
             token = readToken();
         }
         currentToken = token;
+        cout << currentToken.toString() << endl;
     }
 
     Token Parser::readToken() {
@@ -144,25 +152,26 @@ namespace JSON {
             return readWordToken();
         }
 
+        int startPos = pos;
         switch (code) {
             case 123: // '{'
                 pos++;
-                return Token(BRACES_START, "{", pos - 1, pos);
+                return Token(BRACES_START, "{", startPos, pos);
             case 125: // '}'
                 pos++;
-                return Token(BRACES_END, "}", pos - 1, pos);
+                return Token(BRACES_END, "}", startPos, pos);
             case 91: // '['
                 pos++;
-                return Token(BRACKETS_START, "[", pos - 1, pos);
+                return Token(BRACKETS_START, "[", startPos, pos);
             case 93: // ']'
                 pos++;
-                return Token(BRACKETS_END, "]", pos - 1, pos);
+                return Token(BRACKETS_END, "]", startPos, pos);
             case 58: // ':'
                 pos++;
-                return Token(SEPARATOR, ":", pos - 1, pos);
+                return Token(SEPARATOR, ":", startPos, pos);
             case 44: // ','
                 pos++;
-                return Token(COMMA, ",", pos - 1, pos);
+                return Token(COMMA, ",", startPos, pos);
             case 34: // '"'
                 return readStringToken();
             default:;
@@ -268,17 +277,6 @@ namespace JSON {
 
         string value = input.substr(chunkStart, pos - chunkStart);
         return Token(WORD, value, chunkStart, pos);
-    }
-
-    Node Parser::startNode(int pos) {
-        Node node;
-        node.start = start;
-        return node;
-    }
-
-    Node Parser::finishNode(Node &node) {
-        node.end = pos;
-        return Node();
     }
 
     int Parser::getCodeAt(int index) {
