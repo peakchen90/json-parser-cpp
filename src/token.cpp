@@ -4,19 +4,23 @@
 
 #include "token.h"
 
-Token::Token() {}
+namespace JSON {
 
-Token::Token(TokenType type, string value) : type(type), value(value) {
-}
+    Token::Token() {}
 
-Token::Token(TokenType type, string value, int start, int end) : type(type), value(value), start(start), end(end) {
-}
+    Token::Token(TokenType type, string value) : type(type), value(value) {
+    }
 
-void Token::setRange(int start, int end) {
-    this->start = start;
-    this->end = end;
-}
+    Token::Token(TokenType type, string value, int start, int end) : type(type), value(value), start(start), end(end) {
+    }
 
-string Token::toString() {
-    return "Token:" + value + "(" + to_string(start) + "," + to_string(end) + ")";
+    void Token::setRange(int start, int end) {
+        this->start = start;
+        this->end = end;
+    }
+
+    string Token::toString() {
+        return "Token:" + value + "(" + to_string(start) + "," + to_string(end) + ")";
+    }
+
 }

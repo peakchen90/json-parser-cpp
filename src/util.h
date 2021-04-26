@@ -8,6 +8,8 @@
 
 #include "env.h"
 
+namespace JSON {
+
 //struct Position {
 //    int line;
 //    int column;
@@ -20,17 +22,19 @@
 
 //Location getLocation(int startLine, int startColumn, int endLine, int endColumn);
 
-bool isNumberChar(int code);
+    bool isNumberChar(int code);
 
-bool isWordChar(int code);
+    bool isWordChar(int code);
 
-bool stringEquals(string a, string b);
+    bool stringEquals(string a, string b);
 
-string stringEscape(string str, char ch);
+    string stringEscape(string str, char ch);
 
-string strIndent(int width, char prefix = 0);
+    string strIndent(int width, char prefix = 0);
 
-string readFile(const string& path);
+    string readFile(const string &path);
 
+
+}
 
 #endif //JSON_PARSER_CPP_UTIL_H

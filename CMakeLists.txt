@@ -3,23 +3,29 @@ project(json_parser_cpp)
 
 set(CMAKE_CXX_STANDARD 14)
 
+# test
 add_executable(
     json_parser_test
     src/test.cpp
+    src/index.cpp
     src/parser.cpp
     src/node.cpp
     src/token.cpp
     src/util.cpp
     src/stringify.cpp
+    src/walk.cpp
 )
 
+# build
 add_executable(
     json_parser
-    src/test.cpp
+    src/cli.cpp
+    src/index.cpp
     src/parser.cpp
     src/node.cpp
     src/token.cpp
     src/util.cpp
     src/stringify.cpp
+    src/walk.cpp
 )
 

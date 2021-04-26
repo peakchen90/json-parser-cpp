@@ -8,7 +8,7 @@
             "name": "(lldb) 调试启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/json_parser_cpp",
+            "program": "${workspaceFolder}/build/json_parser_test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

@@ -9,38 +9,42 @@
 #include "env.h"
 #include "util.h"
 
-enum TokenType {
-    BRACES_START = '{',
-    BRACES_END = '}',
-    BRACKETS_START = '[',
-    BRACKETS_END = ']',
-    SEPARATOR = ':',
-    COMMA = ',',
-    STRING,
-    NUMBER,
-    WORD,
-    START_F,
-    END_F,
-};
+namespace JSON {
+
+    enum TokenType {
+        BRACES_START = '{',
+        BRACES_END = '}',
+        BRACKETS_START = '[',
+        BRACKETS_END = ']',
+        SEPARATOR = ':',
+        COMMA = ',',
+        STRING,
+        NUMBER,
+        WORD,
+        START_F,
+        END_F,
+    };
 
 
-class Token {
-public:
-    TokenType type;
-    string value;
-    int start;
-    int end;
+    class Token {
+    public:
+        TokenType type;
+        string value;
+        int start;
+        int end;
 
-    Token();
+        Token();
 
-    Token(TokenType type, string value);
+        Token(TokenType type, string value);
 
-    Token(TokenType type, string value, int start, int end);
+        Token(TokenType type, string value, int start, int end);
 
-    void setRange(int start, int end);
+        void setRange(int start, int end);
 
-    string toString();
-};
+        string toString();
+    };
+
+}
 
 
 #endif //JSON_PARSER_CPP_TOKEN_H

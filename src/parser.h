@@ -10,55 +10,58 @@
 #include "token.h"
 #include "node.h"
 
-class Parser {
-protected:
-    int length;
-    int pos;
-    Token currentToken;
-    Token lastToken;
-    int start;
-    int end;
+namespace JSON {
 
-    Node parseNode();
+    class Parser {
+    protected:
+        int length;
+        int pos;
+        Token currentToken;
+        Token lastToken;
+        int start;
+        int end;
 
-    Node parseObjectExpression();
+        Node parseNode();
 
-    Node parseArrayExpression();
+        Node parseObjectExpression();
 
-    void next();
+        Node parseArrayExpression();
 
-    Token readToken();
+        void next();
 
-    Token readStringToken();
+        Token readToken();
 
-    Token readNumberToken();
+        Token readStringToken();
 
-    Token readWordToken();
+        Token readNumberToken();
 
-    Node startNode(int pos);
+        Token readWordToken();
 
-    Node finishNode(Node &node);
+        Node startNode(int pos);
 
-    int getCodeAt(int index);
+        Node finishNode(Node &node);
 
-    void skipSpace();
+        int getCodeAt(int index);
 
-    bool isValidPos() const;
+        void skipSpace();
 
-    void expect(TokenType type);
+        bool isValidPos() const;
 
-    void unexpected(Token token);
+        void expect(TokenType type);
 
-public:
-    const string input;
-    Node ast;
+        void unexpected(Token token);
 
-    Parser(string input);
+    public:
+        const string input;
+        Node ast;
 
-    ~Parser();
+        Parser(string input);
 
-    Node parse();
-};
+        ~Parser();
 
+        Node parse();
+    };
+
+}
 
 #endif //JSON_PARSER_CPP_PARSER_H

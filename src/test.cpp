@@ -9,15 +9,16 @@
 string readJson() {
     string filename = __FILE__;
     filename.replace(filename.length() - 8, 8, "test.json");
-    return readFile(filename);
+    return JSON::readFile(filename);
 }
 
 int main() {
     string input = readJson();
-    Parser parser(input);
-    Node node = parser.parse();
-    Stringifier stringifier(2);
+    JSON::Parser parser(input);
+    JSON::Node node = parser.parse();
+    JSON::Stringifier stringifier;
     cout << stringifier.stringify(node) << endl;
+    cout << stringifier.stringify(node.children[0].children[2], 4) << endl;
 
     return 0;
 }
