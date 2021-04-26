@@ -11,6 +11,7 @@ void printHelpInfo() {
     cout << "Usage: json <options> filename" << endl;
     cout << "example: json -f a.json" << endl;
     cout << endl;
+    cout << "Options" << endl;
     cout << "    -f, --format [indent]   format json file" << endl;
     cout << "    -m, --minify            minify json file" << endl;
     cout << endl;
@@ -23,7 +24,6 @@ void formatJSON(string filename, int indent) {
     parser.parse();
     string str = stringifier.stringify(parser.ast, indent);
     JSON::writeFile(filename, str);
-    cout << endl << str << endl;
 }
 
 int main(int argc, char *argv[]) {
