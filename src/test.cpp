@@ -23,6 +23,6 @@ int main() {
        cout << n.toString() << endl;
     });
 
-    cout << stringifier.stringify(node) << endl;
+    cout << stringifier.stringify(node, 2) << endl;
     return 0;
 }

@@ -139,7 +139,15 @@ namespace JSON {
     void Parser::next() {
         Token token;
         lastToken = currentToken;
-        skipSpace();
+
+        int startPos = -1;
+        while (isValidPos() && startPos != pos) {
+            startPos = pos;
+            skipSpace();
+            skipLineComment();
+            skipBlockComment();
+        }
+
         if (!isValidPos()) {
             token = Token(END_F, "EOF", length, length);
         } else {
@@ -302,6 +310,34 @@ namespace JSON {
                 pos++;
             } else {
                 break;
+            }
+        }
+    }
+
+    void Parser::skipLineComment() {
+        int code = getCodeAt(pos);
+        if (code == 47 && getCodeAt(pos + 1) == 47) { // '//'
+            pos++;
+            while (isValidPos()) {
+                code = getCodeAt(++pos);
+                if (code == 10) { // '\n'
+                    pos++;
+                    break;
+                }
+            }
+        }
+    }
+
+    void Parser::skipBlockComment() {
+        int code = getCodeAt(pos);
+        if (code == 47 && getCodeAt(pos + 1) == 42) { // '/*'
+            pos++;
+            while (isValidPos()) {
+                code = getCodeAt(++pos);
+                if (code == 42 && getCodeAt(pos + 1) == 47) { // '*/'
+                    pos += 2;
+                    break;
+                }
             }
         }
     }

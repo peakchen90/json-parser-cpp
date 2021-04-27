@@ -44,6 +44,10 @@ namespace JSON {
 
         void skipSpace();
 
+        void skipLineComment();
+
+        void skipBlockComment();
+
         bool isValidPos() const;
 
         void expect(TokenType type);
