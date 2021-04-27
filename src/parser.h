@@ -52,7 +52,7 @@ namespace JSON {
 
         void unexpected(int pos);
 
-        void unexpected(TokenTypeName &name, int pos);
+        void unexpected(TokenTypeName name, int pos);
 
     public:
         const string input;

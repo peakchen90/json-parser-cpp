@@ -213,7 +213,7 @@ namespace JSON {
         }
 
         if (code != 34) { // '"'
-            unexpected(pos);
+            unexpected(TYPE_STRING, pos);
         }
 
         value += input.substr(chunkStart, pos - chunkStart);
@@ -267,7 +267,7 @@ namespace JSON {
 
         // check
         if (expectNumber) {
-            unexpected(currentToken); // TODO
+            unexpected(TYPE_NUMBER, pos);
         }
 
         string value = input.substr(chunkStart, pos - chunkStart);
@@ -343,7 +343,7 @@ namespace JSON {
         exit(1);
     }
 
-    void Parser::unexpected(TokenTypeName &name, int current) {
+    void Parser::unexpected(TokenTypeName name, int current) {
         string tokenName;
         if (name == TYPE_NUMBER) {
             tokenName = "number";
