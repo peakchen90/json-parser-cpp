@@ -20,7 +20,7 @@ namespace JSON {
     class Parser {
     protected:
         int length;
-        int pos;
+        int pos = 0;
         Token currentToken;
         Token lastToken;
 
@@ -62,7 +62,7 @@ namespace JSON {
         const string input;
         Node ast;
 
-        Parser(string input);
+        Parser(const string& input);
 
         ~Parser();
 

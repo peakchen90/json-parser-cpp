@@ -6,16 +6,17 @@
 #include "util.h"
 
 namespace JSON {
-    Parser::Parser(string input) : input(input) {
-        currentToken = Token(START_F, "", 0, 0);
-        lastToken = currentToken;
+    Parser::Parser(const string& input) : input(input) {
         length = input.length();
-        pos = 0;
     }
 
     Parser::~Parser() = default;
 
     Node Parser::parse() {
+        currentToken = Token(START_F, "", 0, 0);
+        lastToken = currentToken;
+        pos = 0;
+
         next();
         Node body = parseNode();
         Node node(NodeType::Root, vector<Node>{body}, 0, length);
