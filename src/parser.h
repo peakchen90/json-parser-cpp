@@ -62,7 +62,7 @@ namespace JSON {
         const string input;
         Node ast;
 
-        Parser(const string& input);
+        Parser(const string &input);
 
         ~Parser();
 

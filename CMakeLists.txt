@@ -8,8 +8,6 @@ add_executable(
     json_test
     src/test.cpp
     src/parser.cpp
-    src/node.cpp
-    src/token.cpp
     src/util.cpp
     src/stringify.cpp
     src/walk.cpp
@@ -20,8 +18,6 @@ add_executable(
     json
     src/cli.cpp
     src/parser.cpp
-    src/node.cpp
-    src/token.cpp
     src/util.cpp
     src/stringify.cpp
     src/walk.cpp

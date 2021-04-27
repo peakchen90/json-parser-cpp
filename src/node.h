@@ -36,19 +36,29 @@ namespace JSON {
         // 其他类型取第 0 个元素
         vector<Node> children;
 
-        Node();
+        Node() {
+        }
 
-        Node(string type);
+        Node(string type) : type(type) {
+        }
 
-        Node(string type, string rawValue);
+        Node(string type, string rawValue) : type(type), rawValue(rawValue) {
+        }
 
-        Node(string type, string rawValue, int start, int end);
+        Node(string type, string rawValue, int start, int end)
+                : type(type), rawValue(rawValue), start(start), end(end) {
+        }
 
-        Node(string type, vector<Node> children);
+        Node(string type, vector<Node> children) : type(type), children(children) {
+        }
 
-        Node(string type, vector<Node> children, int start, int end);
+        Node(string type, vector<Node> children, int start, int end)
+                : type(type), children(children), start(start), end(end) {
+        }
 
-        string toString();
+        string toString() {
+            return "Node:" + type + "(" + to_string(start) + "," + to_string(end) + ")";
+        }
     };
 }
 

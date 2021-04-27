@@ -33,15 +33,22 @@ namespace JSON {
         int start;
         int end;
 
-        Token();
+        Token() {}
 
-        Token(TokenType type, string value);
+        Token(TokenType type, string value) : type(type), value(value) {
+        }
 
-        Token(TokenType type, string value, int start, int end);
+        Token(TokenType type, string value, int start, int end) : type(type), value(value), start(start), end(end) {
+        }
 
-        void setRange(int start, int end);
+        void setRange(int start, int end) {
+            this->start = start;
+            this->end = end;
+        }
 
-        string toString();
+        string toString() {
+            return "Token:" + value + "(" + to_string(start) + "," + to_string(end) + ")";
+        }
     };
 
 }
