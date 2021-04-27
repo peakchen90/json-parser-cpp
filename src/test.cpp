@@ -5,6 +5,7 @@
 #include "node.h"
 #include "parser.h"
 #include "stringify.h"
+#include "walk.h"
 
 string readJson() {
     string filename = __FILE__;
@@ -17,6 +18,11 @@ int main() {
     JSON::Parser parser(input);
     JSON::Node node = parser.parse();
     JSON::Stringifier stringifier;
+
+    JSON::walk(node, [](JSON::Node &n, JSON::WalkContext ctx)->void {
+       cout << n.toString() << endl;
+    });
+
     cout << stringifier.stringify(node) << endl;
     return 0;
 }

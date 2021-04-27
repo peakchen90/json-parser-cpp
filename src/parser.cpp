@@ -85,15 +85,17 @@ namespace JSON {
             Node property(NodeType::ObjectProperty, section, key.start, lastToken.end);
             properties.push_back(property);
 
-            // end of comma
+            // end of property
             if (currentToken.type == COMMA) {
                 hasTailComma = true;
                 next();
+            } else if (currentToken.type != BRACES_END) {
+                break;
             }
         }
 
         if (hasTailComma) {
-            unexpected(Token()); // TODO
+            unexpected(currentToken); // TODO
         }
 
         expect(BRACES_END);
@@ -113,14 +115,18 @@ namespace JSON {
         while (isValidPos() && currentToken.type != BRACKETS_END) {
             hasTailComma = false;
             elements.push_back(parseNode());
+
+            // end of element
             if (currentToken.type == COMMA) {
                 hasTailComma = true;
                 next();
+            } else if (currentToken.type != BRACKETS_END) {
+                break;
             }
         }
 
         if (hasTailComma) {
-            unexpected(Token()); // TODO
+            unexpected(currentToken); // TODO
         }
 
         expect(BRACKETS_END);
@@ -174,7 +180,7 @@ namespace JSON {
             case 34: // '"'
                 return readStringToken();
             default:;
-                unexpected(Token(END_F, "")); // TODO
+                unexpected(currentToken); // TODO
         }
     }
 
@@ -207,7 +213,7 @@ namespace JSON {
         }
 
         if (code != 34) { // '"'
-            unexpected(Token(END_F, "")); // TODO
+            unexpected(currentToken); // TODO
         }
 
         value += input.substr(chunkStart, pos - chunkStart);
@@ -261,7 +267,7 @@ namespace JSON {
 
         // check
         if (expectNumber) {
-            unexpected(Token(END_F, "")); // TODO
+            unexpected(currentToken); // TODO
         }
 
         string value = input.substr(chunkStart, pos - chunkStart);
@@ -310,9 +316,13 @@ namespace JSON {
         }
     }
 
-    void Parser::unexpected(Token token) {
-        cout << endl << " >>>>>>>>>>> unexpected <<<<<<<<<<<" << endl;
-        exit(222);
+    void Parser::unexpected(Token &token) {
+        string source = input;
+        Position position = getPosition(source, token.start);
+        string msg = "Uncaught SyntaxError: Unexpected token a in JSON at position " + to_string(token.start) +
+                     " (line " + to_string(position.line) + ", column " + to_string(position.column) + ")";
+        cerr << msg << endl;
+        exit(1);
     }
 
 }

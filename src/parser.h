@@ -43,7 +43,7 @@ namespace JSON {
 
         void expect(TokenType type);
 
-        void unexpected(Token token);
+        void unexpected(Token &token);
 
     public:
         const string input;
