@@ -12,6 +12,11 @@
 
 namespace JSON {
 
+    enum TokenTypeName {
+        TYPE_STRING,
+        TYPE_NUMBER
+    };
+
     class Parser {
     protected:
         int length;
@@ -44,6 +49,10 @@ namespace JSON {
         void expect(TokenType type);
 
         void unexpected(Token &token);
+
+        void unexpected(int pos);
+
+        void unexpected(TokenTypeName &name, int pos);
 
     public:
         const string input;

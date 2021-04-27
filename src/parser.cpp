@@ -21,7 +21,7 @@ namespace JSON {
         Node node(NodeType::Root, vector<Node>{body}, 0, length);
         ast = node;
         if (currentToken.type != END_F) {
-            unexpected(currentToken); // TODO
+            unexpected(currentToken);
         }
         return ast;
     }
@@ -50,10 +50,10 @@ namespace JSON {
                 node = Node(NodeType::BooleanLiteral, tokenValue, currentToken.start, currentToken.end);
                 next();
             } else {
-                unexpected(currentToken); // TODO
+                unexpected(currentToken);
             }
         } else {
-            unexpected(currentToken); // TODO
+            unexpected(currentToken);
         }
 
         node.start = startPos;
@@ -95,7 +95,7 @@ namespace JSON {
         }
 
         if (hasTailComma) {
-            unexpected(currentToken); // TODO
+            unexpected(lastToken);
         }
 
         expect(BRACES_END);
@@ -126,7 +126,7 @@ namespace JSON {
         }
 
         if (hasTailComma) {
-            unexpected(currentToken); // TODO
+            unexpected(lastToken);
         }
 
         expect(BRACKETS_END);
@@ -180,7 +180,7 @@ namespace JSON {
             case 34: // '"'
                 return readStringToken();
             default:;
-                unexpected(currentToken); // TODO
+                unexpected(pos);
         }
     }
 
@@ -213,7 +213,7 @@ namespace JSON {
         }
 
         if (code != 34) { // '"'
-            unexpected(currentToken); // TODO
+            unexpected(pos);
         }
 
         value += input.substr(chunkStart, pos - chunkStart);
@@ -317,9 +317,43 @@ namespace JSON {
     }
 
     void Parser::unexpected(Token &token) {
+        string msg;
+        if (token.type == END_F) {
+            msg = "Uncaught SyntaxError: Unexpected end of JSON input";
+        } else {
+            string source = input;
+            Position position = getPosition(source, token.start);
+            msg = "Uncaught SyntaxError: Unexpected token "
+                  + token.value + " in JSON at position " + to_string(token.start)
+                  + " (line " + to_string(position.line) + ", column " + to_string(position.column) + ")";
+        }
+
+        cerr << msg << endl;
+        exit(1);
+    }
+
+    void Parser::unexpected(int current) {
         string source = input;
-        Position position = getPosition(source, token.start);
-        string msg = "Uncaught SyntaxError: Unexpected token a in JSON at position " + to_string(token.start) +
+        string str = to_string(input[pos]);
+        Position position = getPosition(source, current);
+        string msg = "Uncaught SyntaxError: Unexpected token "
+                     + str + " in JSON at position " + to_string(current)
+                     + " (line " + to_string(position.line) + ", column " + to_string(position.column) + ")";
+        cerr << msg << endl;
+        exit(1);
+    }
+
+    void Parser::unexpected(TokenTypeName &name, int current) {
+        string tokenName;
+        if (name == TYPE_NUMBER) {
+            tokenName = "number";
+        } else if (name == TYPE_STRING) {
+            tokenName = "string";
+        }
+        string source = input;
+        Position position = getPosition(source, current);
+        string msg = "Uncaught SyntaxError: Unexpected " + tokenName
+                     + " in JSON at position " + to_string(current) +
                      " (line " + to_string(position.line) + ", column " + to_string(position.column) + ")";
         cerr << msg << endl;
         exit(1);
