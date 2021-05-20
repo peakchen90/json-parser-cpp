@@ -262,7 +262,7 @@ namespace JSON {
                 allowDot = false;
                 expectNumber = true;
                 pos++;
-                if (isValidPos() && getCodeAt(pos) == 43 || getCodeAt(pos) == 45) { // '+' or '-'
+                if (isValidPos() && (getCodeAt(pos) == 43 || getCodeAt(pos) == 45)) { // '+' or '-'
                     pos++;
                 }
             } else if (allowDot && code == 46) { // '.'
