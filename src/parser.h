@@ -66,7 +66,7 @@ namespace JSON {
 
         ~Parser();
 
-        Node parse();
+        Node &parse();
     };
 
 }

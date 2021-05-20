@@ -12,7 +12,7 @@ namespace JSON {
 
     Parser::~Parser() = default;
 
-    Node Parser::parse() {
+    Node &Parser::parse() {
         currentToken = Token(START_F, "", 0, 0);
         lastToken = currentToken;
         pos = 0;
