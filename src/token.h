@@ -5,7 +5,6 @@
 #ifndef JSON_PARSER_CPP_TOKEN_H
 #define JSON_PARSER_CPP_TOKEN_H
 
-
 #include "env.h"
 #include "util.h"
 
@@ -35,10 +34,10 @@ namespace JSON {
 
         Token() {}
 
-        Token(TokenType type, string value) : type(type), value(value) {
+        Token(TokenType type, string value) : type(type), value(std::move(value)) {
         }
 
-        Token(TokenType type, string value, int start, int end) : type(type), value(value), start(start), end(end) {
+        Token(TokenType type, string value, int start, int end) : type(type), value(std::move(value)), start(start), end(end) {
         }
 
         void setRange(int start, int end) {

@@ -51,6 +51,70 @@ namespace JSON {
         return res;
     }
 
+    int getStringBytesAt(string &str, int pos) {
+        int code = (unsigned char) str[pos];
+        unsigned int base = 0b10000000;
+        if ((code & base) == base) {
+            int bytes = 0;
+            do {
+                bytes++;
+                base = base >> 1;
+            } while ((code & base) == base);
+            return bytes;
+        } else {
+            return 1;
+        }
+    }
+
+    string getStringAt(string &str, int pos) {
+        int bytes = getStringBytesAt(str, pos);
+        return str.substr(pos, bytes);
+    }
+
+    int getStringIndexAt(string &str, int pos) {
+        if (pos >= str.length()) {
+            return -1;
+        }
+        int index = -1;
+        int i = 0;
+        while (i <= pos) {
+            i += getStringBytesAt(str, i);
+            index++;
+        }
+        return index;
+    }
+
+    unsigned int getCodePointAt(string &str, int index) {
+        int code = (unsigned char) str[index];
+        unsigned int baseBits = 0b10000000;
+        unsigned int controlBits;
+
+        // 计算第一个字节前 n 位为 1 的个数
+        int bytes = 0;
+        if ((code & baseBits) == baseBits) { // 0b1xxxxxxx
+            do {
+                controlBits = baseBits;
+                baseBits = baseBits | (baseBits >> 1);
+                bytes++;
+            } while ((code & baseBits) == baseBits);
+        } else {
+            return code;
+        }
+
+        // 3字节示例：1110xxxx 10xxxxxx 10xxxxxx
+        // 第一字节有效位数： 8 - 字节数 - 1,  后续每个字节有效位数: 6
+        // 由于后续字节有效位占6位，所以需要把高位左移 6 * (第n字节 - 1), 为低位留空间
+        int i = bytes - 1;
+        unsigned int result = (code ^ controlBits) << (i * 6);
+        while (i >= 1) {
+            int c = (unsigned char) str[index + i];
+            result += (c & 0b00111111) << ((bytes - i - 1) * 6);
+            i--;
+        }
+
+        return result;
+    }
+
     string readFile(const string &path) {
         string data;
         string chunk;
@@ -103,7 +167,7 @@ namespace JSON {
             } else {
                 position.column++;
             }
-            i++;
+            i += getStringBytesAt(source, i);
         }
         return position;
     }

@@ -6,7 +6,7 @@
 #include "util.h"
 
 namespace JSON {
-    Parser::Parser(const string& input) : input(input) {
+    Parser::Parser(const string &input) : input(input) {
         length = input.length();
     }
 
@@ -353,6 +353,13 @@ namespace JSON {
         }
     }
 
+    void Parser::checkEndOfUnexpected(int pos) const {
+        if (pos >= length) {
+            cerr << "Uncaught SyntaxError: Unexpected end of JSON input" << endl;
+            exit(1);
+        }
+    }
+
     void Parser::unexpected(Token &token) {
         string msg;
         if (token.type == END_F) {
@@ -370,17 +377,21 @@ namespace JSON {
     }
 
     void Parser::unexpected(int current) {
+        checkEndOfUnexpected(current);
+
         string source = input;
-        string str = to_string(input[pos]);
+        string str = getStringAt(source, pos);
         Position position = getPosition(source, current);
         string msg = "Uncaught SyntaxError: Unexpected token "
-                     + str + " in JSON at position " + to_string(current)
+                     + str + " in JSON at position " + to_string(getStringIndexAt(source, current))
                      + " (line " + to_string(position.line) + ", column " + to_string(position.column) + ")";
         cerr << msg << endl;
         exit(1);
     }
 
     void Parser::unexpected(TokenTypeName name, int current) {
+        checkEndOfUnexpected(current);
+
         string tokenName;
         if (name == TYPE_NUMBER) {
             tokenName = "number";
@@ -390,7 +401,7 @@ namespace JSON {
         string source = input;
         Position position = getPosition(source, current);
         string msg = "Uncaught SyntaxError: Unexpected " + tokenName
-                     + " in JSON at position " + to_string(current) +
+                     + " in JSON at position " + to_string(getStringIndexAt(source, current)) +
                      " (line " + to_string(position.line) + ", column " + to_string(position.column) + ")";
         cerr << msg << endl;
         exit(1);

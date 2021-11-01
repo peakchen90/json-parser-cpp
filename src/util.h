@@ -20,6 +20,14 @@ namespace JSON {
 
     string strIndent(int width, char prefix = 0);
 
+    int getStringBytesAt(string &str, int pos);
+
+    string getStringAt(string &str, int pos);
+
+    int getStringIndexAt(string &str, int pos);
+
+    unsigned int getCodePointAt(string &str, int index = 0);
+
     string readFile(const string &path);
 
     void writeFile(string &path, string &data);

@@ -52,6 +52,8 @@ namespace JSON {
 
         void expect(TokenType type);
 
+        void checkEndOfUnexpected(int pos) const;
+
         void unexpected(Token &token);
 
         void unexpected(int pos);
@@ -62,7 +64,7 @@ namespace JSON {
         const string input;
         Node ast;
 
-        Parser(const string &input);
+        explicit Parser(const string &input);
 
         ~Parser();
 
