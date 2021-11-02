@@ -18,12 +18,14 @@ void printHelpInfo() {
 }
 
 void formatJSON(string filename, int indent) {
+    clock_t start = clock();
     filename = JSON::resolvePath(filename);
     JSON::Parser parser(JSON::readFile(filename));
     JSON::Stringifier stringifier;
     parser.parse();
     string str = stringifier.stringify(parser.ast, indent);
     JSON::writeFile(filename, str);
+    cout << "Complete! Cost: " << (double) (clock() - start) / CLOCKS_PER_SEC << "s" << endl;
 }
 
 int main(int argc, char *argv[]) {

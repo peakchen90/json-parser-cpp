@@ -3,6 +3,15 @@ project(json_parser_cpp)
 
 set(CMAKE_CXX_STANDARD 14)
 
+add_library(
+    json
+    src/lib.cpp
+    src/parser.cpp
+    src/util.cpp
+    src/stringify.cpp
+    src/walk.cpp
+)
+
 # test
 add_executable(
     json_test
@@ -15,7 +24,7 @@ add_executable(
 
 # cli
 add_executable(
-    json
+    json_cli
     src/cli.cpp
     src/parser.cpp
     src/util.cpp

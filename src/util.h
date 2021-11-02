@@ -34,7 +34,7 @@ namespace JSON {
 
     string getCWD();
 
-    string resolvePath(string &path);
+    string resolvePath(const string &path);
 
     struct Position {
         int line;

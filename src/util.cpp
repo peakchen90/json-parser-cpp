@@ -151,7 +151,7 @@ namespace JSON {
         return res;
     }
 
-    string resolvePath(string &path) {
+    string resolvePath(const string &path) {
         string cwd = getCWD();
         return cwd + '/' + path;
     }
